@@ -35,9 +35,19 @@ letters = list(string.ascii_uppercase)
 search_letters = WebDriverWait(driver, 10).until(
     EC.presence_of_element_located((By.CLASS_NAME, "inalco-teacher-result-block")))
 
+#Appends another Z so the names with this letter are not skipped
+letters.append('Z')
 #Iterates over the list of letters, excluding the letters that are not available
 #Clicks on each letter, good base to extract the teachers info later on
+teachers = []
 for l in letters:
+    webSurname = driver.find_elements(By.CLASS_NAME, "inalco-teacher-card__name")
+    webName = driver.find_elements(By.CLASS_NAME, "inalco-teacher-card__surname")
+    # Iterates over the list of web element and extracts the name and surnames, also checks if this is not empty
+    #x : surname ; y : name
+    for x,y in zip(webSurname, webName):
+        if x.text != '' and y.text != '':
+            teachers.append((x.text, y.text))
     current_l = WebDriverWait(driver, 100).until(
     EC.presence_of_element_located((By.ID, l)))
     letter_class = current_l.get_attribute("class")
@@ -46,13 +56,5 @@ for l in letters:
         pass
     else:
         current_l.click()
-
-webSurname = driver.find_elements(By.CLASS_NAME, "inalco-teacher-card__name")
-webName = driver.find_elements(By.CLASS_NAME, "inalco-teacher-card__surname")
-names = []
-# Iterates over the list of web element and extracts the name and surnames, also checks if this is not empty
-#x : surname ; y : name
-for x,y in zip(webSurname, webName):
-    if x.text != '' and y.text != '':
-        names.append((x.text, y.text))
-print(names)
+        
+print(list(set(teachers)))
