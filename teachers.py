@@ -8,7 +8,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import string
 import time
-import re
 
 #Options for the web browser
 service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
@@ -56,5 +55,5 @@ for l in letters:
         pass
     else:
         current_l.click()
-        
-print(list(set(teachers)))
+driver.close()
+
