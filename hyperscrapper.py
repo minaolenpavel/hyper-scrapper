@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementClickInterceptedException
 import time
+import datetime
 
 service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
 options = webdriver.FirefoxOptions()
@@ -26,25 +27,36 @@ search_bar = WebDriverWait(driver, 10).until(
 search_bar.send_keys("Nouvel")
 search_bar.send_keys(Keys.ENTER)
 
-action = webdriver.ActionChains(driver)
-action.move_by_offset(10, 20)
-action.perform()
-
-menus_list = driver.find_elements(By.CLASS_NAME, "item-menu_niveau1")
-for e in menus_list:
-    print(e.text)
-    if e.text == "Récapitulatif des cours":
+menus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau1")
+for e in menus:
+    if e.text == "Emploi du temps":
         try:
-            e.click()
+            action = webdriver.ActionChains(driver)
+            action.move_to_element(e)
+            action.perform()
+            submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
         except ElementClickInterceptedException:
+            print("excepted")
             time.sleep(10)
-            e.click()
+            action = webdriver.ActionChains(driver)
+            action.move_to_element(e)
+            action.perform()
+            submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
+        finally:
+            action.move_by_offset(0,60)
+            action.perform()
+            action.click()
+            action.perform()
+        break
 
-
-
-
-
-#recap_cours = By.
-#
-#recap_cours.click()
-
+weeknum = 38
+time.sleep(1)
+weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
+for week in weeks:
+    try:
+        week.click()
+    except ElementClickInterceptedException:
+        time.sleep(1)
+        week.click()
+    finally:
+        pass
