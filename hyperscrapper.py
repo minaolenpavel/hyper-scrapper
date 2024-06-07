@@ -36,7 +36,6 @@ for e in menus:
             action.perform()
             submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
         except ElementClickInterceptedException:
-            print("excepted")
             time.sleep(10)
             action = webdriver.ActionChains(driver)
             action.move_to_element(e)
@@ -48,15 +47,19 @@ for e in menus:
             action.click()
             action.perform()
         break
-
-weeknum = 38
 time.sleep(1)
+
 weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
 for week in weeks:
-    try:
-        week.click()
-    except ElementClickInterceptedException:
-        time.sleep(1)
-        week.click()
-    finally:
-        pass
+    if week.text == "38":
+        try:
+            week.click()
+        except ElementClickInterceptedException:
+            time.sleep(1)
+            week.click()
+        finally:
+            div_week= driver.find_element(By.CLASS_NAME, "WhiteSpaceNormal")
+            subelements = div_week.find_elements(By.XPATH, "./*")
+            for course in subelements:
+                print(course.text)
+
