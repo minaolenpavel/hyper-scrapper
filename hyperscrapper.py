@@ -9,57 +9,61 @@ from selenium.common.exceptions import ElementClickInterceptedException
 import time
 import datetime
 
-service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
-options = webdriver.FirefoxOptions()
-options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
-driver = webdriver.Firefox(service=service, options=options)
-driver.maximize_window()
+def extract_rooms(teachers:list):
+    service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
+    options = webdriver.FirefoxOptions()
+    options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
+    driver = webdriver.Firefox(service=service, options=options)
+    driver.maximize_window()
 
-driver.get("https://planning.inalco.fr/public")
-check_search_teachers = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.ID, "GInterface.Instances[0].Instances[1]_Combo0")))
-search_by_teacher = driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo0")
-search_by_teacher.click()
+    driver.get("https://planning.inalco.fr/public")
+    check_search_teachers = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "GInterface.Instances[0].Instances[1]_Combo0")))
+    search_by_teacher = driver.find_element(By.ID, "GInterface.Instances[0].Instances[1]_Combo0")
+    search_by_teacher.click()
 
-search_bar = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit"))
-)
-search_bar.send_keys("Nouvel")
-search_bar.send_keys(Keys.ENTER)
+    search_bar = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit"))
+    )
+    search_bar.send_keys("Nouvel")
+    search_bar.send_keys(Keys.ENTER)
 
-menus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau1")
-for e in menus:
-    if e.text == "Emploi du temps":
-        try:
-            action = webdriver.ActionChains(driver)
-            action.move_to_element(e)
-            action.perform()
-            submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
-        except ElementClickInterceptedException:
-            time.sleep(10)
-            action = webdriver.ActionChains(driver)
-            action.move_to_element(e)
-            action.perform()
-            submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
-        finally:
-            action.move_by_offset(0,60)
-            action.perform()
-            action.click()
-            action.perform()
-        break
-time.sleep(1)
+    menus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau1")
+    for e in menus:
+        if e.text == "Emploi du temps":
+            try:
+                action = webdriver.ActionChains(driver)
+                action.move_to_element(e)
+                action.perform()
+                submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
+            except ElementClickInterceptedException:
+                time.sleep(10)
+                action = webdriver.ActionChains(driver)
+                action.move_to_element(e)
+                action.perform()
+                submenus = driver.find_elements(By.CLASS_NAME, "item-menu_niveau2")
+            finally:
+                action.move_by_offset(0,60)
+                action.perform()
+                action.click()
+                action.perform()
+            break
+    time.sleep(1)
 
-weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
-for week in weeks:
-    if week.text == "38":
-        try:
-            week.click()
-        except ElementClickInterceptedException:
-            time.sleep(1)
-            week.click()
-        finally:
-            div_week= driver.find_element(By.CLASS_NAME, "WhiteSpaceNormal")
-            subelements = div_week.find_elements(By.XPATH, "./*")
-            for course in subelements:
-                print(course.text)
+    weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
+    for week in weeks:
+        if week.text == "38":
+            try:
+                week.click()
+            except ElementClickInterceptedException:
+                time.sleep(1)
+                week.click()
+            finally:
+                div_week= driver.find_element(By.CLASS_NAME, "WhiteSpaceNormal")
+                subelements = div_week.find_elements(By.XPATH, "./*")
+                for course in subelements:
+                    print(course.text)
 
+if __name__ == "__main__":
+    teachers = []
+    extract_rooms(teachers)
