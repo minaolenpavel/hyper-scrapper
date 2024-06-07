@@ -1,10 +1,10 @@
-from salle import Room
+from dispoSalle import RoomAvailability
 
 class RoomManager:
     def __init__(self) -> None:
         self.Rooms = []
     
-    def add_room(self, newRoom:Room):
+    def add_room(self, newRoom:RoomAvailability):
         if self.check_Rooms:
             pass
         else:

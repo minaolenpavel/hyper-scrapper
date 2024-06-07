@@ -1,6 +1,7 @@
-class Room:
-    def __init__(self, number:str) -> None:
-        self.Number = number
+class RoomAvailability:
+    def __init__(self, roomnumber:str, weeknumber:int) -> None:
+        self.WeekNumber = weeknumber
+        self.RoomNumber = roomnumber
         self.Monday = []
         self.Tuesday = []
         self.Wednesday = []
