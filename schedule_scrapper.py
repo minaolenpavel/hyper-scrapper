@@ -7,6 +7,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementClickInterceptedException
 import time
+import datetime
+
+
+def week_number():
+    week_num = datetime.date.today().strftime("%V")
+    return week_num
 
 def extract_rooms(teachers:list):
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
