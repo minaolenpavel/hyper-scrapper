@@ -57,7 +57,28 @@ def extract_teachers_list():
         else:
             current_l.click()
     driver.close()
+
+    teachers = handle_exceptions(teachers)
+
     return teachers
+
+def handle_exceptions(teachers:list):
+    index = teachers.index("BILOS Piotr (Pierre)")
+    teachers[index] = "BILOS Piotr"
+    index = teachers.index("CALZOLARI BOUVIER Valentina")
+    teachers[index] = "CALZOLARI Valentina"
+    index = teachers.index("BOUCHER Line")
+    teachers[index] = "BOUCHER Lin Tran"
+    index = teachers.index("CAPDEVILLE-ZENG Catherine")
+    teachers[index] = "CAPDEVILLE Catherine"
+    index = teachers.index("DELAMOTTE Guibourg　ギブール・ドラモット")
+    teachers[index] = "DELAMOTTE Anne-Guibourg"
+    index = teachers.index("DEBSI Augustin Théodore")
+    teachers[index] = "DEBSI Augustin"
+    index = teachers.index("DURAND-DASTÈS Vincent")
+    teachers[index] = "DURAND DASTES Vincent"
+    return teachers
+
 
 if __name__ == "__main__":
     print(extract_teachers_list())
