@@ -15,44 +15,8 @@ def extract(raw_schedule:list):
     info_by_day = {day: [] for day in days_of_week}
     current_day = None
 
-    #for line in raw_schedule:
-    #    line = line.strip()
-    #    for day in days_of_week:
-    #        if day in line:
-    #            current_day = day
-    #            info_by_day[current_day].append(line)
-    #            break
-    #    else:
-    #        if current_day is not None:
-    #            info_by_day[current_day].append(line)
-    #print(info_by_day)
     pattern_room = r"[0-7]\.[0-3][0-9]"
-    #for key, value_list in info_by_day.items():
-    #    for value in value_list:
-    #        match = re.search(pattern_room, value)
-    #        if match:
-    #            print(f"Match {match.group()}")
-    #        else:
-    #            print("no match")
-
     pattern_time = r"[0-2][0-9]h[0-6][0-9] - [0-2][0-9]h[0-6][0-9]"
-    #for key, value_list in info_by_day.items():
-    #    for value in value_list:
-    #        match = re.search(pattern_time, value)
-    #        if match:
-    #            print(f"Match {match.group()}")
-    #        else:
-    #            print("no match")
-
-
-    #raw_info = {day:[] for day in days_of_week}
-    #for key, value_list in info_by_day.items():
-    #    for value in value_list:
-    #        match_time = re.search(pattern_time, value)
-    #        match_room = re.search(pattern_room, value)
-    #        if match_time or match_room:
-    #            print(value)
-    #            raw_info[key].append((match_time.group(), match_room.group()))
     
     for line in raw_schedule:
         line = line.strip()
