@@ -47,7 +47,7 @@ def extract_teachers_list():
         #x : surname ; y : name
         for x,y in zip(webSurname, webName):
             if x.text != '' and y.text != '':
-                teachers.append((x.text, y.text))
+                teachers.append(" ".join((x.text, y.text)))
         current_l = WebDriverWait(driver, 100).until(
         EC.presence_of_element_located((By.ID, l)))
         letter_class = current_l.get_attribute("class")
@@ -58,4 +58,7 @@ def extract_teachers_list():
             current_l.click()
     driver.close()
     return teachers
+
+if __name__ == "__main__":
+    print(extract_teachers_list())
 
