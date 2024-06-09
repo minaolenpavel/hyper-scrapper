@@ -75,7 +75,7 @@ def extract_rooms(teachers:list):
                     except NoSuchElementException:
                         print("blocked by firewall error, no such element")
                         continue
-        if count >= 10:
+        if count >= 25:
             driver.refresh()
             count = 0
             set_up_page(driver)
