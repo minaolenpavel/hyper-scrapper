@@ -10,6 +10,7 @@ import time
 
 service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
 options = webdriver.FirefoxOptions()
+options.add_argument("--headless")
 options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
 driver = webdriver.Firefox(service=service, options=options)
 driver.maximize_window()
@@ -35,12 +36,19 @@ for bloc in range(num_blocks+1):
         filiereplus = driver.find_element(By.ID, f"GInterface.Instances[1].Instances[1]_bloc{bloc+1}")
         driver.execute_script("arguments[0].scrollIntoView();", filiereplus)
         print(filiere.text)
-        filieres_connues.append(filiere.text)
+        filieres_connues.append(filiere.text.rstrip())
     elif bloc == 33:
         filiere = driver.find_element(By.ID, f"GInterface.Instances[1].Instances[1]_bloc{bloc}")
         print(filiere.text)
-        filieres_connues.append(filiere)
-    elif bloc == 34:
+        filieres_connues.append(filiere.text.rstrip())
         driver.quit
-        print(filieres_connues)
 
+filieres = []
+for filiere in filieres_connues:
+    new_filiere = filiere.replace("\n", ", ")
+    filieres.append(new_filiere)
+
+filieres = ", ".join(filieres)
+filieres = filieres.split(", ")
+
+print(filieres)
