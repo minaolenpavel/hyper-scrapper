@@ -64,7 +64,7 @@ def extract_rooms(teachers:list):
                     week.click()
                 except ElementClickInterceptedException:
                     print(teacher)
-                    time.sleep(1)
+                    time.sleep(3)
                     week.click()
                 finally:
                     try: 

@@ -58,9 +58,10 @@ def extract_teachers_list():
         else:
             current_l.click()
     driver.close()
-
-    teachers = remove_non_latin(teachers)
+    teachers = list(set(teachers))
     teachers = handle_exceptions(teachers)
+    teachers = remove_non_latin(teachers)
+    teachers = remove_ghosts(teachers)
 
     return teachers
 
@@ -73,40 +74,22 @@ def remove_non_latin(teachers:list):
     return teachers
 
 def handle_exceptions(teachers:list):
-    index = teachers.index("BILOS Piotr (Pierre)")
-    teachers[index] = "BILOS Piotr"
-    index = teachers.index("CALZOLARI BOUVIER Valentina")
-    teachers[index] = "CALZOLARI Valentina"
-    index = teachers.index("BOUCHER Line")
-    teachers[index] = "BOUCHER Lin Tran"
-    index = teachers.index("CAPDEVILLE-ZENG Catherine")
-    teachers[index] = "CAPDEVILLE Catherine"
-    index = teachers.index("DEBSI Augustin Théodore")
-    teachers[index] = "DEBSI Augustin"
-    index = teachers.index("DURAND-DASTÈS Vincent")
-    teachers[index] = "DURAND DASTES Vincent"
-    index = teachers.index("EGLINGER Jean-Philippe")
-    teachers[index] = "EGLINGER Jean - Philippe"
+    corrected_mistakes = {"BILOS Piotr (Pierre)" : "BILOS Piotr", "CALZOLARI BOUVIER Valentina" : "CALZOLARI Valentina", "BOUCHER Line" : "BOUCHER Lin Tran", "CAPDEVILLE-ZENG Catherine" : "CAPDEVILLE Catherine", "DEBSI Augustin Théodore" : "DEBSI Augustin", "DURAND-DASTÈS Vincent" : "DURAND DASTES Vincent", "EGLINGER Jean-Philippe" : "EGLINGER Jean - Philippe", "NAÏT ZERAD Kamal" :  "NAIT-ZERRAD Kamal", "NEUVE-EGLISE Amelie" : "NEUVE - EGLISE Amelie", "SAMSON NORMAND DE CHAMBOURG Dominique" : "SAMSON Dominique", "YAYA MCKENZIE Isabel": "YAYA Isabel", "YU Xinyue Cécilia" : "YU Xinyue"}
+
+    return teachers
+
+def remove_ghosts(teachers:list):
     index = teachers.index("GUERIN Mathieu")
     teachers.pop(index)
     index = teachers.index("GUILLARD Kahina")
     teachers.pop(index)
-    index = teachers.index("NAÏT ZERAD Kamal")
-    teachers[index] = "NAIT-ZERRAD Kamal"
     index = teachers.index('MOHAMED Oumrati')
     teachers.pop(index)
-    index = teachers.index('NEUVE-EGLISE Amelie')
-    teachers[index] = 'NEUVE - EGLISE Amelie'
-    index = teachers.index('SAMSON NORMAND DE CHAMBOURG Dominique')
-    teachers[index] = 'SAMSON Dominique'
-    index = teachers.index("YAYA MCKENZIE Isabel")
-    teachers[index] = "YAYA Isabel"
-    index = teachers.index('YU Xinyue Cécilia')
-    teachers[index] = "YU Xinyue"
     return teachers
 
-
+def add_not_found(teachers:list):
+    teachers.append("VASSILIOUTCHEK-MESTRE Jeanne")
+    teachers.append("MAGISTRY Pierre")
 
 if __name__ == "__main__":
-    print(remove_non_latin(['ALLÈS Delphine', 'ALMENDROS Rubén', 'ANTONOV Anton', 'ARGUILLERE Stephane', 'ARMIANOV Gueorgui', 'ARSLANGUL Arnaud', 'AYKURT-BUCHWALTER Sulun', 'AYOUB Rania', 'ALLÈS Delphine', 'ALMENDROS Rubén', 'ANTONOV Anton', 'ARGUILLERE Stephane', 'ARMIANOV Gueorgui', 'ARSLANGUL Arnaud', 'AYKURT-BUCHWALTER Sulun', 'AYOUB Rania', 'BARONTINI Alexandrine', 'BAYOU Celine', 'BAZANTAY Jean', 'BERNITSKAIA Natalia', 'BILOS Piotr', 'BOIN PRINCIPATO Nicolas', 'BOUCHER Lin Tran', 'CHO Yunhaeng', 'CALZOLARI Valentina', 'CAPDEVILLE Catherine', 'CARANDINA Elisa', 'CARAYOL Martin', 'CASPILLO Nanette', 'CHALVIN Antoine', 'CHASSAING Sylvia', 'CHEIKH Mériam', 'CHIABOTTI Francesco', 'CHOI Jiyoung', 'CHOSSON Marie', 'COMOLLI Nadia', 'CORDOVA Johanna', 'COUMEL Laurent', 'COUSQUER David', 'DELAMOTTE Anne-Guibourg', 'DAO Huy Linh', 'DEBSI Augustin', 'DEWEL Serge', 'DIOT Benedicte', 'DOAN Cam Thi', 'DONABEDIAN-DEMOPOULOS Anaïd', 'DURAND DASTES Vincent', 'DUVALLON Outi', 'DUVIGNEAU Julie', 'DE PABLO Elisabeth', 'EBERSOLT Simon', 'EGLINGER Jean - Philippe', 'ELIAS Nicolas', 'FEDIUNIN Jules Sergei', 'FERKAL Masin', 'FOLSCHWEILLER Cecile', 'FORLOT Gilles', 'GODEFROY Noémi', 'GUETTA Alessandro', 'GUIDI Andreas', 'HAQUE Shahzaman', 'HURPEAU FUJIOKA Ami', 'INTHANO Theeraphong', 'JAFARI (ALAVI) Belgheis', 'JOMIER Augustin', 'KIM 金 Daeyeol 大烈', 'KESA Katerina', 'KONUMA Isabelle', 'LI Buqian 李不愆', 'LAGUER Hanane', 'LARIBI Soraya', 'LAVOIX Valérie', 'LE BOURHIS Eric', 'LIPMAN Ada', 'LÉGLISE Isabelle', 'MARDALE Alexandru', 'MACALUSO Ilenia', 'MADELAIN Anne', 'MAHIEU Marc-Antoine', 'MARCHINA Charlotte', 'MEROLLA Daniela', 'MEYER Ronny', 'MIKHEL Polina', 'MILOSAVLJEVIC Nenad', 'MOHAMED Oumrati', 'MORANGE Marianne', 'MUSSO Chloé', 'NAKAMURA-DELLOYE Yayoi', 'NAÏT ZERAD Kamal', 'NEUVE-EGLISE Amelie', 'NONDEDEO Philippe', 'NOUVEL Damien', 'NAKAMURA-DELLOYE Yayoi', 'NAÏT ZERAD Kamal', 'NEUVE-EGLISE Amelie', 'NONDEDEO Philippe', 'NOUVEL Damien', 'PEIGNÉ Céline', 'PEREGO Simon', 'PEREIRA Christophe', 'PÉRONNET Amandine', 'PEIGNÉ Céline', 'PEREGO Simon', 'PEREIRA Christophe', 'PÉRONNET Amandine', 'ROULOIS Alexandre', 'RUBINO Marcella', 'SAMSON NORMAND DE CHAMBOURG Dominique', 'SANGARÉ Youssouf', 'SALA Greta', 'SERFASS David', 'SIMONNEAU Damien', 'SLIM Assen', 'SMILAUER Ivan', 'STOCKINGER Peter', 'SULEYMANOV Murad', 'SZENDE Thomas', 'THOMANN Bernard', 'THUMELIN Claire', 'TOKUMITSU Naoko', 'TOUTANT Marc', 'THOMANN Bernard', 'THUMELIN Claire', 'TOKUMITSU Naoko', 'TOUTANT Marc', 'VALETTE Mathieu', 'VARGOVCIKOVA Jana', 'VASSILAKI Sophie', 'VERCUEIL Julien', 'VERON Emmanuel', 'VIGUIER Anne', 'VRINAT-NIKOLOV Marie', 'VUILLEUMIER Victor', 'WEI Lia', 'WEI Lia', 'YATZIV-MALIBERT Il-Il', 'YAYA MCKENZIE Isabel', 'YU Xinyue Cécilia', 'ZHANG Guochuan']))
-
+    print(extract_teachers_list())

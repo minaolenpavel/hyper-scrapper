@@ -2,6 +2,7 @@ import datetime
 import locale
 import re
 import schedule_scrapper
+import teachers_scrapper
 
 def format_list(raw_info:list):
     raw_info = " ".join(raw_info)
@@ -57,8 +58,7 @@ def extract(raw_schedule:list):
     return info_by_day
     
 if __name__ == "__main__":
-    test_variables = ['ALLÈS Delphine', 'ALMENDROS Rubén', 'ANTONOV Anton', 'ARGUILLERE Stephane', 'ARMIANOV Gueorgui', 'ARSLANGUL Arnaud', 'AYKURT-BUCHWALTER Sulun', 'AYOUB Rania', 'ALLÈS Delphine', 'ALMENDROS Rubén', 'ANTONOV Anton', 'ARGUILLERE Stephane', 'ARMIANOV Gueorgui', 'ARSLANGUL Arnaud', 'AYKURT-BUCHWALTER Sulun', 'AYOUB Rania', 'BARONTINI Alexandrine', 'BAYOU Celine', 'BAZANTAY Jean', 'BERNITSKAIA Natalia', 'BILOS Piotr', 'BOIN PRINCIPATO Nicolas', 'BOUCHER Lin Tran', 'CHO Yunhaeng', 'CALZOLARI Valentina', 'CAPDEVILLE Catherine', 'CARANDINA Elisa', 'CARAYOL Martin', 'CASPILLO Nanette', 'CHALVIN Antoine', 'CHASSAING Sylvia', 'CHEIKH Mériam', 'CHIABOTTI Francesco', 'CHOI Jiyoung', 'CHOSSON Marie', 'COMOLLI Nadia', 'CORDOVA Johanna', 'COUMEL Laurent', 'COUSQUER David', 'DELAMOTTE Anne-Guibourg', 'DAO Huy Linh', 'DEBSI Augustin', 'DEWEL Serge', 'DIOT Benedicte', 'DOAN Cam Thi', 'DONABEDIAN-DEMOPOULOS Anaïd', 'DURAND DASTES Vincent', 'DUVALLON Outi', 'DUVIGNEAU Julie', 'DE PABLO Elisabeth', 'EBERSOLT Simon', 'EGLINGER Jean - Philippe', 'ELIAS Nicolas', 'FEDIUNIN Jules Sergei', 'FERKAL Masin', 'FOLSCHWEILLER Cecile', 'FORLOT Gilles', 'GODEFROY Noémi', 'GUETTA Alessandro', 'GUIDI Andreas', 'HAQUE Shahzaman', 'HURPEAU FUJIOKA Ami', 'INTHANO Theeraphong', 'JAFARI ALAVI Belgheis', 'JOMIER Augustin', 'KIM  Daeyeol ', 'KESA Katerina', 'KONUMA Isabelle', 'LI Buqian ', 'LAGUER Hanane', 'LARIBI Soraya', 'LAVOIX Valérie', 'LE BOURHIS Eric', 'LIPMAN Ada', 'LÉGLISE Isabelle', 'MARDALE Alexandru', 'MACALUSO Ilenia', 'MADELAIN Anne', 'MAHIEU Marc-Antoine', 'MARCHINA Charlotte', 'MEROLLA Daniela', 'MEYER Ronny', 'MIKHEL Polina', 'MILOSAVLJEVIC Nenad', 'MORANGE Marianne', 'MUSSO Chloé', 'NAKAMURA-DELLOYE Yayoi', 'NAIT-ZERRAD Kamal', 'NONDEDEO Philippe', 'NOUVEL Damien', 'NAKAMURA-DELLOYE Yayoi', 'NAIT-ZERRAD Kamal', 'NEUVE - EGLISE Amelie', 'NONDEDEO Philippe', 'NOUVEL Damien', 'PEIGNÉ Céline', 'PEREGO Simon', 'PEREIRA Christophe', 'PÉRONNET Amandine', 'PEIGNÉ Céline', 'PEREGO Simon', 'PEREIRA Christophe', 'PÉRONNET Amandine', 'ROULOIS Alexandre', 'RUBINO Marcella', 'SAMSON Dominique', 'SANGARÉ Youssouf', 'SALA Greta', 'SERFASS David', 'SIMONNEAU Damien', 'SLIM Assen', 'SMILAUER Ivan', 'STOCKINGER Peter', 'SULEYMANOV Murad', 'SZENDE Thomas', 'THOMANN Bernard', 'THUMELIN Claire', 'TOKUMITSU Naoko', 'TOUTANT Marc', 'THOMANN Bernard', 'THUMELIN Claire', 'TOKUMITSU Naoko', 'TOUTANT Marc', 'VALETTE Mathieu', 'VARGOVCIKOVA Jana', 'VASSILAKI Sophie', 'VERCUEIL Julien', 'VERON Emmanuel', 'VIGUIER Anne', 'VRINAT-NIKOLOV Marie', 'VUILLEUMIER Victor', 'WEI Lia', 'WEI Lia', 'YATZIV-MALIBERT Il-Il', 'YAYA Isabel', 'YU Xinyue', 'ZHANG Guochuan']
-    index = test_variables.index('YAYA Isabel')-1
-    raw_info = schedule_scrapper.extract_rooms(test_variables[index:])
+    teachers = teachers_scrapper.extract_teachers_list()
+    raw_info = schedule_scrapper.extract_rooms(teachers)
     raw_info = format_list(raw_info)
     print(extract(raw_info))
