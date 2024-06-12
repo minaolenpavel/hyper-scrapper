@@ -28,10 +28,10 @@ def set_up_page(driver):
     action.click()
     action.perform()
 
-def extract_rooms(filieres:list):
+def scrap_schedules(filieres:list):
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
     options = webdriver.FirefoxOptions()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(service=service, options=options)
     driver.maximize_window()
@@ -53,9 +53,11 @@ def extract_rooms(filieres:list):
                 try:
                     week.click()
                 except ElementClickInterceptedException:
-                    print(filiere)
-                    time.sleep(3)
-                    week.click()
+                    try:
+                        time.sleep(3)
+                        week.click()
+                    except:
+                        continue
                 finally:
                     try: 
                         div_week= driver.find_element(By.CLASS_NAME, "WhiteSpaceNormal")
@@ -63,7 +65,6 @@ def extract_rooms(filieres:list):
                         for course in subelements:
                             raw_schedules.append(course.text)
                     except NoSuchElementException:
-                        print("blocked by firewall error, no such element")
                         continue
         if count >= 25:
             driver.refresh()
@@ -81,4 +82,4 @@ def into_txt(raw:list):
 
 if __name__ == "__main__":
     filieres = ['Letton L2']
-    into_txt(extract_rooms(filieres))
+    into_txt(scrap_schedules(filieres))
