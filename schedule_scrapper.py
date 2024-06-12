@@ -71,7 +71,7 @@ def extract_rooms(filieres:list):
             set_up_page(driver)
         else:
             count += 1
-    return raw_schedules
+    into_txt(raw_schedules)
 
 def into_txt(raw:list):
     with open("raw.txt", "w") as txt_file:
@@ -80,5 +80,5 @@ def into_txt(raw:list):
 
 
 if __name__ == "__main__":
-    filieres = ['Letton L1']
+    filieres = ['Letton L2']
     into_txt(extract_rooms(filieres))
