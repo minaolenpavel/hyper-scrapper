@@ -48,5 +48,20 @@ def extract_filieres():
     filieres = ", ".join(filieres)
     filieres = filieres.split(", ")
 
+    filieres = correct_hyphens(filieres)
+
     return filieres
+
+def correct_hyphens(promos:list):
+    promos_corrected = []
+    for promo in promos:
+        if "‑" in promo:
+            promo_corrected = promo.replace("‑", "-")
+            promos_corrected.append(promo_corrected)
+        else:
+            promos_corrected.append(promo)
+    return promos_corrected
+
+if __name__ == "__main__":
+    print(extract_filieres())
 

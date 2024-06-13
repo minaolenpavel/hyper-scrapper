@@ -1,9 +1,8 @@
 import re
-import schedule_scrapper
 
 def raw_from_txt(filepath:str):
     raw = []
-    with open(filepath, "r") as raw_txt:
+    with open(filepath, "r", encoding="utf-8") as raw_txt:
         info = raw_txt.readlines()
         raw.append(info)
     return raw
@@ -38,7 +37,8 @@ def extract(raw:list):
         # Update the day's timeslots with the filtered list
         info_by_day[day] = filtered_timeslots
     
-    return info_by_day
+    with open('dict_output.txt', 'w') as file:
+        file.write(str(info_by_day))
 
 if __name__ == "__main__":
     raw = raw_from_txt("raw.txt")
