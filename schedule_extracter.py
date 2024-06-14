@@ -14,8 +14,6 @@ def extract(raw:list):
     pattern_time = r"[0-2][0-9]h[0-6][0-9] - [0-2][0-9]h[0-6][0-9]"
     pattern = r"[0-2][0-9]h[0-6][0-9] - [0-2][0-9]h[0-6][0-9]|[0-7]\.[0-3][0-9]"
     current_day = None
-    current_room = None
-    current_time = None
     for info in raw:
         for sub in info:
             for day in days:

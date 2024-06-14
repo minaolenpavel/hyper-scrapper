@@ -5,9 +5,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException, TimeoutException
 import time
 import datetime
+import random
+import os
 
 
 def week_number():
@@ -38,23 +40,30 @@ def set_up_page(driver):
                 action.perform()
             break
     time.sleep(1)
+    
 
-def extract_rooms(teachers:list):
+def scrap_schedules(filieres:list):
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
     options = webdriver.FirefoxOptions()
+    #options.add_argument("--headless")
     options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(service=service, options=options)
     driver.maximize_window()
 
     driver.get("https://planning.inalco.fr/public")
-    
     set_up_page(driver)
-    raw_schedules = []
+    
+    if os.path.exists("raw.txt"):
+        os.remove("raw.txt")
+        open("raw.txt", "x")
+    
     count = 0
-    for teacher in teachers:
+    for filiere in filieres:
         search_bar = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[1].bouton_Edit")))
-        search_bar.send_keys(teacher)
+        search_bar.clear()
+        search_bar.send_keys(filiere)
+        time.sleep(random.random())
         search_bar.send_keys(Keys.ENTER)
         time.sleep(1)
         weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
@@ -63,28 +72,43 @@ def extract_rooms(teachers:list):
                 try:
                     week.click()
                 except ElementClickInterceptedException:
-                    print(teacher)
-                    time.sleep(3)
-                    week.click()
+                    print("element click interception")
+                    continue
                 finally:
-                    try: 
-                        div_week= driver.find_element(By.CLASS_NAME, "WhiteSpaceNormal")
-                        subelements = div_week.find_elements(By.XPATH, "./*")
-                        for course in subelements:
-                            raw_schedules.append(course.text)
-                    except NoSuchElementException:
-                        print("blocked by firewall error, no such element")
+                    try:
+                        contenu = WebDriverWait(driver, random.random()).until(EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[7]_Contenu_0")))
+                        contenu_child = contenu.find_element(By.TAG_NAME, "tbody")
+                        courses = contenu_child.find_elements(By.XPATH, "./*")
+                        raw_course = []
+                        for course in courses:
+                            into_txt(course.text)
+                    except TimeoutException:
+                        print("time out")
+                        print(filiere)
                         continue
+                    except StaleElementReferenceException:
+                        print("stale element")
+                        print(filiere)                    
         if count >= 25:
             driver.refresh()
             count = 0
             set_up_page(driver)
         else:
             count += 1
-    return raw_schedules
 
+def into_txt(raw:list):
+    with open("raw.txt", "a", encoding="utf-8") as txt_file:
+        txt_file.write(raw + "\n")
+        txt_file.close()
 
+def error_popup(driver):
+    button = driver.find_element(By.TAG_NAME, "button")
+    button.click()
 
 if __name__ == "__main__":
-    teachers = ['BILOS Piotr (Pierre)']
-    print(extract_rooms(teachers))
+    teachers = []
+    with open("teachers.txt", "r", encoding="utf-8") as teachers_txt:
+        for line in teachers_txt:
+            teachers.append(line)
+    scrap_schedules(teachers)
+
