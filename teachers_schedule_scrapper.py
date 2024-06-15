@@ -42,19 +42,22 @@ def set_up_page(driver):
                 action.perform()
             break
     time.sleep(1)
-    
-def scrap_schedules(teachers:list):
+
+def create_driver():
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
     options = webdriver.FirefoxOptions()
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(service=service, options=options)
     driver.maximize_window()
     driver.get("https://planning.inalco.fr/public")
+    return driver
 
+def scrap_schedules(teachers:list, reparse:bool = False):
+    driver = create_driver()
     set_up_page(driver)
-    create_txt()
-
+    if not reparse:
+        create_txt()
     count = 0
     for teacher in teachers:
         search_bar = WebDriverWait(driver, random.random()).until(
@@ -84,30 +87,46 @@ def scrap_schedules(teachers:list):
                         continue
                     except StaleElementReferenceException:
                         logger.write("StaleElementReferenceException", teacher)
-
-                        
+                        write_unparsed(teacher)
+                        continue
         if count >= 25:
             driver.refresh()
             count = 0
             set_up_page(driver)
         else:
             count += 1
+    check_unparsed()
 
 def create_txt():
     if os.path.exists("raw.txt"):
         os.remove("raw.txt")
-        open("raw.txt", "x")
+    open("raw.txt", "x", encoding="utf-8").close()
+    if os.path.exists("unparsed.txt"):
+        os.remove("unparsed.txt")
+    open("unparsed.txt", "x", encoding="utf-8").close()
 
-def into_txt(raw:list):
+def write_unparsed(unparsed: str):
+    with open("unparsed.txt", "a", encoding="utf-8") as unparsed_txt:
+        unparsed_txt.write(unparsed + "\n")
+
+def check_unparsed():
+    unparsed = []
+    with open("unparsed.txt", "r", encoding="utf-8") as unparsed_txt:
+        unparsed = [line.strip() for line in unparsed_txt if line.strip()]
+    if unparsed:
+        logger.write("INFO", "Reparsing unparsed entries")
+        scrap_schedules(unparsed, reparse=True)
+    if os.path.exists("unparsed.txt"):
+        os.remove("unparsed.txt")
+
+def into_txt(raw: str):
     with open("raw.txt", "a", encoding="utf-8") as txt_file:
         txt_file.write(raw + "\n")
-        txt_file.close()
 
-def retrieve_teachers(filepath:str):
+def retrieve_teachers(filepath: str):
     teachers = []
     with open(filepath, "r", encoding="utf-8") as teachers_txt:
-        for line in teachers_txt:
-            teachers.append(line)
+        teachers = [line.strip() for line in teachers_txt if line.strip()]
     return teachers
 
 if __name__ == "__main__":
