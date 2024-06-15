@@ -40,4 +40,4 @@ def extract(raw:list):
 
 if __name__ == "__main__":
     raw = raw_from_txt("raw.txt")
-    print(extract(raw))
+    extract(raw)
