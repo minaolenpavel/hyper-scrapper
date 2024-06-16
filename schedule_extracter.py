@@ -35,9 +35,8 @@ def extract(raw:list):
             # Filter out sub-lists based on length and regex match
             if len(timeslot) > 1 and not re.match(pattern_room, timeslot[0]):
                 filtered_timeslots.append(timeslot)
-            else:
-                print(f"Filtered out: {timeslot}")  # Print filtered out items
-        # Update the day's timeslots with the filtered list
+            #else:
+            #    print(f"Filtered out: {timeslot}")
         info_by_day[day] = filtered_timeslots
 
     with open('dict_output.txt', 'w') as file:

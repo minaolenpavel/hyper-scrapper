@@ -46,10 +46,10 @@ def set_up_page(driver):
 def create_driver():
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
     options = webdriver.FirefoxOptions()
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(service=service, options=options)
-    driver.maximize_window()
+    #driver.maximize_window()
     driver.get("https://planning.inalco.fr/public")
     return driver
 
