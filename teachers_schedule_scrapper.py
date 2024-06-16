@@ -46,7 +46,7 @@ def set_up_page(driver):
 def create_driver():
     service = Service(executable_path=r"C:\Program Files (x86)\geckodriver.exe")
     options = webdriver.FirefoxOptions()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.binary_location = r"C:\Program Files\Mozilla Firefox\firefox.exe"
     driver = webdriver.Firefox(service=service, options=options)
     driver.maximize_window()
@@ -77,7 +77,8 @@ def scrap_schedules(teachers:list, reparse:bool = False):
                     continue
                 finally:
                     try:
-                        contenu = WebDriverWait(driver, random.random()).until(EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[7]_Contenu_0")))
+                        contenu = WebDriverWait(driver, random.random()).until(
+                            EC.presence_of_element_located((By.ID, "GInterface.Instances[1].Instances[7]_Contenu_0")))
                         contenu_child = contenu.find_element(By.TAG_NAME, "tbody")
                         courses = contenu_child.find_elements(By.XPATH, "./*")
                         for course in courses:
@@ -95,7 +96,9 @@ def scrap_schedules(teachers:list, reparse:bool = False):
             set_up_page(driver)
         else:
             count += 1
-    check_unparsed()
+    driver.quit()
+    if not reparse:
+        check_unparsed()
 
 def create_txt():
     if os.path.exists("raw.txt"):
@@ -115,6 +118,8 @@ def check_unparsed():
         unparsed = [line.strip() for line in unparsed_txt if line.strip()]
     if unparsed:
         logger.write("INFO", "Reparsing unparsed entries")
+        for teacher in unparsed:
+            logger.write("REPARSING", teacher)
         scrap_schedules(unparsed, reparse=True)
     if os.path.exists("unparsed.txt"):
         os.remove("unparsed.txt")
