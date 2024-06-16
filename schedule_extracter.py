@@ -28,15 +28,22 @@ def extract(raw:list):
                         i.append(match[0])
                 else:
                     info_by_day[current_day].append(match)
-    for day, timeslots in info_by_day.items():
-        # Filter out sub-lists based on length and regex match
-        filtered_timeslots = [timeslot for timeslot in timeslots if len(timeslot) > 1 and not re.match(pattern_room, timeslot[0])]
         
+    for day, timeslots in info_by_day.items():
+        filtered_timeslots = []
+        for timeslot in timeslots:
+            # Filter out sub-lists based on length and regex match
+            if len(timeslot) > 1 and not re.match(pattern_room, timeslot[0]):
+                filtered_timeslots.append(timeslot)
+            else:
+                print(f"Filtered out: {timeslot}")  # Print filtered out items
         # Update the day's timeslots with the filtered list
         info_by_day[day] = filtered_timeslots
-    
+
     with open('dict_output.txt', 'w') as file:
         file.write(str(info_by_day))
+
+    return info_by_day
 
 if __name__ == "__main__":
     raw = raw_from_txt("raw.txt")
