@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 class Room:
     def __init__(self, code:str):
@@ -46,6 +47,12 @@ class Room:
                 free_intervals.append(f"{current_time.strftime('%Hh%M')} - {end_dt.strftime('%Hh%M')}")
             availability[day] = free_intervals
         return availability
+    
+    def to_dict(self):
+        return {
+            'code' : self.code, 
+            'schedule' : json.dumps(self.get_availability())
+        }
 
 
 

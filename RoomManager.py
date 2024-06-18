@@ -5,11 +5,11 @@ import re
 class RoomManager:
     def __init__(self):
         self.ordered_rooms = []
-        self.__pattern_room = r"[0-7]\.[0-3][0-9]" 
 
     def check_availibity(self, room_test: list, day: str):
+        pattern_room = r"[0-7]\.[0-3][0-9]" 
         # Check if the room code is correctly a room code and not a time frame
-        if re.search(self.__pattern_room, room_test[1]):
+        if re.search(pattern_room, room_test[1]):
             room_code = room_test[1]
             # Check if the room already exists in the list
             for room in self.ordered_rooms:
@@ -24,3 +24,14 @@ class RoomManager:
     def sort_rooms(self):
         self.ordered_rooms = sorted(self.ordered_rooms, key=lambda r: r.code)
 
+if __name__ == "__main__":
+    rooms = extract(raw_from_txt("raw.txt"))
+    roomanager = RoomManager()
+    for key, value in rooms.items():
+        for room in value:
+            roomanager.check_availibity(room, key)
+    roomanager.sort_rooms()
+    for room in roomanager.ordered_rooms:
+        print(room.code)
+        for day in room.schedule.values():
+            print(day)
