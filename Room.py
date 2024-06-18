@@ -23,36 +23,29 @@ class Room:
     def to_datetime(self, time_str: str):
         return datetime.strptime(time_str.replace('h', ':'), "%H:%M")
 
-def get_availability(self):
-    # Initialize an empty dictionary to store availability
-    availability = {}
-    # Iterate through each day and its scheduled intervals
-    for day, intervals in self.schedule.items():
-        # Set the start and end times for the workday
-        start_dt = self.to_datetime("8h00")
-        end_dt = self.to_datetime("22h00")
-        # Sort the intervals by start time to ensure they are in chronological order
-        intervals.sort(key=lambda x: self.to_datetime(x.split(" - ")[0]))
-        # Initialize the current time to the start of the workday
-        current_time = start_dt
-        # Initialize an empty list to store free intervals for the day
-        free_intervals = []
-        # Iterate through each interval for the day
-        for interval in intervals:
-            # Split the interval into start and end times and convert them to datetime objects
-            start, end = map(lambda x: self.to_datetime(x), interval.split(" - "))
-            # If there's a gap before the current interval, add it to the free intervals
-            if current_time < start:
-                free_intervals.append(f"{current_time.strftime('%Hh%M')} - {start.strftime('%Hh%M')}")
-            # Update the current time to the end of the current interval
-            current_time = end
-        # After checking all intervals, if there's remaining time until the end of the workday, add it
-        if current_time < end_dt:
-            free_intervals.append(f"{current_time.strftime('%Hh%M')} - {end_dt.strftime('%Hh%M')}")
-        # Store the free intervals for the day in the availability dictionary
-        availability[day] = free_intervals
-    # Return the availability dictionary
-    return availability
+    def get_availability(self):
+        availability = {}
+        for day, intervals in self.schedule.items():
+            start_dt = self.to_datetime("8h00")
+            end_dt = self.to_datetime("22h00")
+            # Sort the intervals by start time to ensure they are in chronological order
+            intervals.sort(key=lambda x: self.to_datetime(x.split(" - ")[0]))
+            # Initialize the current time to the start of the workday
+            current_time = start_dt
+            free_intervals = []
+            for interval in intervals:
+                # Split the interval into start and end times and convert them to datetime objects
+                start, end = map(lambda x: self.to_datetime(x), interval.split(" - "))
+                # If there's a gap before the current interval, add it to the free intervals
+                if current_time < start:
+                    free_intervals.append(f"{current_time.strftime('%Hh%M')} - {start.strftime('%Hh%M')}")
+                # Update the current time to the end of the current interval
+                current_time = end
+            # After checking all intervals, if there's remaining time until the end of the workday, add it
+            if current_time < end_dt:
+                free_intervals.append(f"{current_time.strftime('%Hh%M')} - {end_dt.strftime('%Hh%M')}")
+            availability[day] = free_intervals
+        return availability
 
 
 
