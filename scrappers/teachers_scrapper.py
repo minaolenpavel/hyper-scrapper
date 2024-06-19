@@ -48,18 +48,18 @@ def extract_teachers():
 
     professeurs = ", ".join(professeurs)
     professeurs = professeurs.split(", ")
+    return professeurs
 
 def correct_hyphens(teacher:str):
     teacher_corrected = ""
     if "‑" in teacher:
         teacher_corrected = teacher.replace("‑", "-")
-    
     return teacher_corrected
 
 def write_txt(teacher:str):
     if not os.path.exists("teachers.txt"):
-        open("teachers2.txt", "x")
-    with open("teachers2.txt", "a", encoding="utf-8") as teachers_txt:
+        open("teachers.txt", "x")
+    with open("teachers.txt", "a", encoding="utf-8") as teachers_txt:
         teachers_txt.write(teacher + "\n")
         teachers_txt.close()
 

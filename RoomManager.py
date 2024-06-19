@@ -1,12 +1,14 @@
 from schedule_extracter import * 
 from Room import *
 import re 
+import DatabaseManager
 
 class RoomManager:
-    def __init__(self):
+    def __init__(self, week:str):
+        self.week_number = week
         self.ordered_rooms = []
 
-    def check_availibity(self, room_test: list, day: str):
+    def create_schedule(self, room_test: list, day: str):
         pattern_room = r"[0-7]\.[0-3][0-9]" 
         # Check if the room code is correctly a room code and not a time frame
         if re.search(pattern_room, room_test[1]):
@@ -26,12 +28,11 @@ class RoomManager:
 
 if __name__ == "__main__":
     rooms = extract(raw_from_txt("raw.txt"))
-    roomanager = RoomManager()
+    roomanager = RoomManager("38")
     for key, value in rooms.items():
         for room in value:
-            roomanager.check_availibity(room, key)
+            roomanager.create_schedule(room, key)
     roomanager.sort_rooms()
+    db_manager = DatabaseManager.DatabaseManager(roomanager.week_number)
     for room in roomanager.ordered_rooms:
-        print(room.code)
-        for day in room.schedule.values():
-            print(day)
+        db_manager.add_room(room)

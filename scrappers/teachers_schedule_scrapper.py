@@ -13,10 +13,7 @@ import os
 from LogManager import LogManager
 
 logger = None
-
-def week_number():
-    week_num = datetime.date.today().strftime("%V")
-    return week_num
+week_num = ""
 
 def set_up_page(driver):
     search_teachers = WebDriverWait(driver, 10).until(
@@ -52,7 +49,8 @@ def create_driver():
     driver.get("https://planning.inalco.fr/public")
     return driver
 
-def scrap_schedules(teachers:list, reparse:bool = False):
+def scrap_schedules(week:str, teachers:list, reparse:bool = False):
+    week_num:str = week
     driver = create_driver()
     set_up_page(driver)
     if not reparse:
@@ -68,7 +66,7 @@ def scrap_schedules(teachers:list, reparse:bool = False):
         time.sleep(1)
         weeks = driver.find_elements(By.CLASS_NAME, "Calendrier_Jour_Const")
         for week in weeks:
-            if week.text == "38":
+            if week.text == week:
                 try:
                     week.click()
                 except ElementClickInterceptedException:
@@ -100,9 +98,9 @@ def scrap_schedules(teachers:list, reparse:bool = False):
         check_unparsed()
 
 def create_txt():
-    if os.path.exists("raw.txt"):
-        os.remove("raw.txt")
-    open("raw.txt", "x", encoding="utf-8").close()
+    if os.path.exists(f"raw{week_num}.txt"):
+        os.remove(f"raw{week_num}.txt")
+    open(f"raw{week_num}.txt", "x", encoding="utf-8").close()
     if os.path.exists("unparsed.txt"):
         os.remove("unparsed.txt")
     open("unparsed.txt", "x", encoding="utf-8").close()
@@ -124,7 +122,7 @@ def check_unparsed():
         os.remove("unparsed.txt")
 
 def into_txt(raw: str):
-    with open("raw.txt", "a", encoding="utf-8") as txt_file:
+    with open(f"raw{week_num}.txt", "a", encoding="utf-8") as txt_file:
         txt_file.write(raw + "\n")
 
 def retrieve_teachers(filepath: str):

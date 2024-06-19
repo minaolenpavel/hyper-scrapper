@@ -3,10 +3,11 @@ import json
 from Room import Room
 
 class DatabaseManager:
-    def __init__(self) -> None:
-        self.conn = sqlite3.connect("room.db")
+    def __init__(self, week_number:str) -> None:
+        self.conn = sqlite3.connect("rooms.db")
         self.cursor = self.conn.cursor()
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS Rooms (
+        table_name = f"Rooms_{week_number}"
+        self.cursor.execute(f'''CREATE TABLE IF NOT EXISTS {table_name} (
                             id INTEGER PRIMARY KEY AUTOINCREMENT,
                             code TEXT UNIQUE,
                             schedule TEXT
